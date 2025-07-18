@@ -133,32 +133,32 @@ def decrypt():
         return "No file part", 400
 
     file = request.files['file']
-    filename = file.filename.lower()
+    extension = request.form.get('extension', '').lower()
     password = request.form.get('password', 'rajesh')
     file_contents = file.read()
 
-    if filename.endswith('.pdf'):
+    if extension == 'pdf':
         decrypted = decrypt_pdf(file_contents, password)
         if decrypted is None:
             return "Incorrect password or PDF decryption failed", 400
         return send_file(io.BytesIO(decrypted), mimetype='application/pdf',
                          as_attachment=True, download_name='decrypted.pdf')
 
-    elif filename.endswith('.json'):
+    elif extension == 'json':
         decrypted = decrypt_json_fernet(file_contents, password)
         if decrypted is None:
             return "Incorrect password or JSON decryption failed", 400
         return send_file(io.BytesIO(decrypted), mimetype='application/json',
                          as_attachment=True, download_name='decrypted.json')
 
-    elif filename.endswith('.xml'):
+    elif extension == 'xml':
         decrypted = decrypt_xml_fernet(file_contents, password)
         if decrypted is None:
             return "Incorrect password or XML decryption failed", 400
         return send_file(io.BytesIO(decrypted), mimetype='application/xml',
                          as_attachment=True, download_name='decrypted.xml')
 
-    elif filename.endswith('.csv'):
+    elif extension == 'csv':
         decrypted = decrypt_csv_fernet(file_contents, password)
         if decrypted is None:
             return "Incorrect password or CSV decryption failed", 400
