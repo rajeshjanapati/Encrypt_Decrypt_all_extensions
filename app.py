@@ -43,11 +43,12 @@ def encrypt():
         return "No file part", 400
 
     file = request.files['file']
-    filename = file.filename
+    extension = request.form.get('extension', '')
     password = request.form.get('password', 'rajesh')
     file_contents = file.read()
 
-    if filename.endswith('.pdf'):
+    # Instead of filename.endswith(), use extension directly
+    if extension == 'pdf':
         encrypted_contents = encrypt_pdf(file_contents, password)
         return send_file(
             io.BytesIO(encrypted_contents),
@@ -56,10 +57,9 @@ def encrypt():
             download_name='encrypted.pdf'
         )
     
-    elif filename.endswith('.xlsx'):
-        # Save original to temp and zip it
+    elif extension == 'xlsx':
         with tempfile.TemporaryDirectory() as tmpdirname:
-            input_path = os.path.join(tmpdirname, filename)
+            input_path = os.path.join(tmpdirname, 'temp.xlsx')
             output_zip = os.path.join(tmpdirname, "encrypted_excel.zip")
             
             with open(input_path, 'wb') as f:
