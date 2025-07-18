@@ -41,17 +41,29 @@ def encrypt():
         return "No file part", 400
 
     file = request.files['file']
+    extension = request.form.get('extension', '')
     password = request.form.get('password', 'rajesh')
     file_contents = file.read()
+    # Instead of filename.endswith(), use extension directly
+    if extension == 'pdf':
+        encrypted_contents = encrypt_pdf(file_contents, password)
+        return send_file(
+            io.BytesIO(encrypted_contents),
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name='encrypted.pdf'
+        )
+    else:
+        return "extension not found", 410
 
-    encrypted_file_contents = encrypt_pdf(file_contents, password)
+    # encrypted_file_contents = encrypt_pdf(file_contents, password)
     
-    return send_file(
-        io.BytesIO(encrypted_file_contents),
-        mimetype='application/pdf',
-        as_attachment=True,
-        download_name='encrypted.pdf'
-    )
+    # return send_file(
+    #     io.BytesIO(encrypted_file_contents),
+    #     mimetype='application/pdf',
+    #     as_attachment=True,
+    #     download_name='encrypted.pdf'
+    # )
 
 @app.route('/decrypt', methods=['POST'])
 def decrypt():
