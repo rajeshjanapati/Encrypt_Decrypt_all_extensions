@@ -1,7 +1,7 @@
 flask==2.3.3
 gunicorn
-pycryptodome==3.20.0   # ✅ for 'Crypto.Cipher'
-PyPDF2
+PyPDF2==3.0.1                 # For PDF reading/writing/encryption
+cryptography==42.0.5          # ✅ Replaces pycryptodome for Fernet-based JSON encryption
 requests==2.31.0
 python-dotenv==1.0.1
 werkzeug==3.0.3
