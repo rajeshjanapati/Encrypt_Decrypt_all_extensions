@@ -158,7 +158,13 @@ def encrypt_file():
             return send_file(io.BytesIO(encrypted), as_attachment=True, download_name='encrypted.csv')
         return "CSV encryption failed", 500
 
-    elif extension in ['xlsx', 'xls']:
+    elif extension == 'xlsx':
+        encrypted = encrypt_excel_fernet(file_contents, password)
+        if encrypted:
+            return send_file(io.BytesIO(encrypted), as_attachment=True, download_name='encrypted.xlsx')
+        return "Excel encryption failed", 500
+
+    elif extension == 'xls':
         encrypted = encrypt_excel_fernet(file_contents, password)
         if encrypted:
             return send_file(io.BytesIO(encrypted), as_attachment=True, download_name='encrypted.xlsx')
@@ -196,7 +202,13 @@ def decrypt_file():
             return send_file(io.BytesIO(decrypted), as_attachment=True, download_name='decrypted.csv')
         return "Incorrect password or CSV decryption failed", 400
 
-    elif extension in ['xlsx', 'xls']:
+    elif extension == 'xlsx':
+        decrypted = decrypt_excel_fernet(file_contents, password)
+        if decrypted:
+            return send_file(io.BytesIO(decrypted), as_attachment=True, download_name='decrypted.xlsx')
+        return "Incorrect password or Excel decryption failed", 400
+
+    elif extension == 'xls':
         decrypted = decrypt_excel_fernet(file_contents, password)
         if decrypted:
             return send_file(io.BytesIO(decrypted), as_attachment=True, download_name='decrypted.xlsx')
