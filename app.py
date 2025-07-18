@@ -124,15 +124,23 @@ def home():
 
 @app.route('/encrypt', methods=['POST'])
 def encrypt_file():
-    uploaded_file = request.files.get('file')
-    password = request.form.get('password')
+    # uploaded_file = request.files.get('file')
+    # password = request.form.get('password')
 
-    if not uploaded_file or not allowed_file(uploaded_file.filename):
-        return "Invalid file", 400
+    # if not uploaded_file or not allowed_file(uploaded_file.filename):
+    #     return "Invalid file", 400
 
-    filename = secure_filename(uploaded_file.filename)
-    extension = filename.rsplit('.', 1)[1].lower()
-    file_contents = uploaded_file.read()
+    # filename = secure_filename(uploaded_file.filename)
+    # extension = filename.rsplit('.', 1)[1].lower()
+    # file_contents = uploaded_file.read()
+
+    if 'file' not in request.files:
+        return "No file part", 400
+
+    file = request.files['file']
+    extension = request.form.get('extension', '').lower()
+    password = request.form.get('password', 'rajesh')
+    file_contents = file.read()
 
     if extension == 'pdf':
         encrypted_file = encrypt_pdf(io.BytesIO(file_contents), password)
@@ -174,15 +182,23 @@ def encrypt_file():
 
 @app.route('/decrypt', methods=['POST'])
 def decrypt_file():
-    uploaded_file = request.files.get('file')
-    password = request.form.get('password')
+    # uploaded_file = request.files.get('file')
+    # password = request.form.get('password')
 
-    if not uploaded_file or not allowed_file(uploaded_file.filename):
-        return "Invalid file", 400
+    # if not uploaded_file or not allowed_file(uploaded_file.filename):
+    #     return "Invalid file", 400
 
-    filename = secure_filename(uploaded_file.filename)
-    extension = filename.rsplit('.', 1)[1].lower()
-    file_contents = uploaded_file.read()
+    # filename = secure_filename(uploaded_file.filename)
+    # extension = filename.rsplit('.', 1)[1].lower()
+    # file_contents = uploaded_file.read()
+
+    if 'file' not in request.files:
+        return "No file part", 400
+
+    file = request.files['file']
+    extension = request.form.get('extension', '').lower()
+    password = request.form.get('password', 'rajesh')
+    file_contents = file.read()
 
     if extension == 'json':
         decrypted = decrypt_json(file_contents, password)
