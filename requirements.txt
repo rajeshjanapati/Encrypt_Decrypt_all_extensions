@@ -1,4 +1,7 @@
-Flask
+flask==2.3.3
+gunicorn
+cryptography==42.0.5
 PyPDF2
-Gunicorn
-pyminizip
+requests==2.31.0
+python-dotenv==1.0.1
+werkzeug==3.0.3
